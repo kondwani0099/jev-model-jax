@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,9 +31,30 @@
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-faint: #64748b;
+      --code-bg: #06090e;
+      --code-text: #93c5fd;
       
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f1f5f9;
+      --bg-surface: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.92);
+      --bg-card-hover: rgba(248, 250, 252, 0.98);
+      --border-color: rgba(0, 0, 0, 0.1);
+      --border-focus: rgba(99, 102, 241, 0.6);
+      
+      --accent-primary: #4f46e5;
+      --accent-primary-hover: #4338ca;
+      --accent-glow: rgba(79, 70, 229, 0.18);
+      
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-faint: #94a3b8;
+      --code-bg: #f8fafc;
+      --code-text: #0369a1;
     }
 
     * {
@@ -50,9 +71,10 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.08) 0%, transparent 45%);
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.09) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.07) 0%, transparent 45%);
     }
 
     /* Header */
@@ -60,7 +82,7 @@
       padding: 1.25rem 2.5rem;
       border-bottom: 1px solid var(--border-color);
       backdrop-filter: blur(12px);
-      background: rgba(10, 13, 20, 0.7);
+      background: var(--bg-card);
       position: sticky;
       top: 0;
       z-index: 50;
@@ -111,11 +133,25 @@
       font-family: var(--font-mono);
       padding: 0.35rem 0.75rem;
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(125, 125, 125, 0.08);
       border: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       gap: 0.45rem;
+      color: var(--text-main);
+    }
+
+    .pill-btn {
+      cursor: pointer;
+      background: rgba(125, 125, 125, 0.08);
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .pill-btn:hover {
+      background: var(--accent-glow);
+      border-color: var(--accent-primary);
     }
 
     .pill-dot {
@@ -154,8 +190,9 @@
       padding: 1.75rem;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      gap: 1.4rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     .card-header {
@@ -163,11 +200,11 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--border-color);
-      padding-bottom: 1rem;
+      padding-bottom: 0.85rem;
     }
 
     .card-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 600;
       display: flex;
       align-items: center;
@@ -177,17 +214,17 @@
     /* Domain Tabs */
     .domain-tabs {
       display: flex;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 0.3rem;
+      background: rgba(125, 125, 125, 0.09);
+      padding: 0.25rem;
       border-radius: 10px;
       border: 1px solid var(--border-color);
-      gap: 0.3rem;
+      gap: 0.25rem;
     }
 
     .tab-btn {
       flex: 1;
-      padding: 0.6rem 1rem;
-      font-size: 0.85rem;
+      padding: 0.55rem 0.85rem;
+      font-size: 0.82rem;
       font-weight: 500;
       border: none;
       background: transparent;
@@ -198,12 +235,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
     }
 
     .tab-btn:hover {
       color: var(--text-main);
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(125, 125, 125, 0.1);
     }
 
     .tab-btn.active {
@@ -216,11 +253,11 @@
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.45rem;
     }
 
     label {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 500;
       color: var(--text-muted);
       display: flex;
@@ -229,7 +266,7 @@
 
     select, textarea, input {
       width: 100%;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(125, 125, 125, 0.08);
       border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 0.75rem 1rem;
@@ -248,7 +285,7 @@
     textarea {
       font-family: var(--font-mono);
       font-size: 0.85rem;
-      min-height: 220px;
+      min-height: 200px;
       resize: vertical;
       line-height: 1.5;
     }
@@ -260,7 +297,7 @@
     }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(125, 125, 125, 0.1);
       border: 1px solid var(--border-color);
       color: var(--text-muted);
       padding: 0.35rem 0.75rem;
@@ -271,7 +308,7 @@
     }
 
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(125, 125, 125, 0.2);
       color: var(--text-main);
     }
 
@@ -281,8 +318,8 @@
       border: none;
       color: #fff;
       font-weight: 600;
-      font-size: 1rem;
-      padding: 0.95rem 1.5rem;
+      font-size: 0.95rem;
+      padding: 0.9rem 1.4rem;
       border-radius: 10px;
       cursor: pointer;
       transition: all 0.25s ease;
@@ -310,13 +347,13 @@
 
     /* Result Panel */
     .decision-hero {
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(125, 125, 125, 0.06);
       border: 1px solid var(--border-color);
       border-radius: 14px;
-      padding: 1.75rem;
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.15rem;
       position: relative;
       overflow: hidden;
     }
@@ -331,13 +368,13 @@
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
-      padding: 0.6rem 1.4rem;
+      padding: 0.55rem 1.35rem;
       border-radius: 9999px;
       font-size: 1.25rem;
       font-weight: 700;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
 
     .decision-badge.approve {
@@ -364,21 +401,21 @@
     .metric-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
+      gap: 0.85rem;
     }
 
     .metric-box {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(125, 125, 125, 0.06);
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      padding: 0.9rem;
+      padding: 0.85rem;
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: 0.25rem;
     }
 
     .metric-label {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--text-faint);
       text-transform: uppercase;
       font-weight: 600;
@@ -386,23 +423,46 @@
     }
 
     .metric-value {
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       font-weight: 700;
       font-family: var(--font-mono);
       color: var(--text-main);
+    }
+
+    /* Policy Reason Box */
+    .reason-box {
+      background: rgba(99, 102, 241, 0.07);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .reason-title {
+      font-weight: 600;
+      font-size: 0.78rem;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: flex;
+      justify-content: space-between;
     }
 
     /* Progress bar */
     .progress-section {
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
+      gap: 0.75rem;
     }
 
     .progress-row {
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.35rem;
     }
 
     .progress-labels {
@@ -413,7 +473,7 @@
 
     .progress-track {
       height: 8px;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(125, 125, 125, 0.12);
       border-radius: 9999px;
       overflow: hidden;
       position: relative;
@@ -422,7 +482,7 @@
     .progress-fill {
       height: 100%;
       border-radius: 9999px;
-      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .progress-fill.approve {
@@ -441,8 +501,8 @@
     .gate-card {
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 1.25rem;
-      background: rgba(0, 0, 0, 0.2);
+      padding: 1.15rem;
+      background: rgba(125, 125, 125, 0.05);
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
@@ -457,7 +517,7 @@
     }
 
     .gate-status-pill {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-family: var(--font-mono);
       padding: 0.25rem 0.6rem;
       border-radius: 6px;
@@ -485,16 +545,16 @@
     }
 
     .code-box {
-      background: #06090e;
+      background: var(--code-bg);
       border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 1rem;
       font-family: var(--font-mono);
       font-size: 0.78rem;
       line-height: 1.6;
-      color: #93c5fd;
+      color: var(--code-text);
       overflow-x: auto;
-      max-height: 180px;
+      max-height: 160px;
     }
 
     /* Footer */
@@ -531,20 +591,21 @@
     <div class="brand">
       <div class="brand-logo">JEV</div>
       <div class="brand-title">
-        <h1>JEV-200M Decision Studio</h1>
-        <p>Sub-Millisecond Decision-Native Intelligence in JAX & Flax</p>
+        <h1>JEV Decision Studio</h1>
+        <p>Decision-Native Intelligence in JAX • GPUs & Cloud TPUs</p>
       </div>
     </div>
     <div class="telemetry-pills">
+      <button class="pill pill-btn" id="themeToggleBtn">
+        <span id="themeIcon">☀️</span>
+        <span id="themeText">Light Theme</span>
+      </button>
       <div class="pill">
         <div class="pill-dot" id="serverStatusDot"></div>
-        <span id="serverStatusText">XLA Engine Connected</span>
+        <span id="serverStatusText">Engine Online</span>
       </div>
       <div class="pill" id="devicePill">
-        <span>Hardware: JAX XLA (CPU/GPU)</span>
-      </div>
-      <div class="pill">
-        <span>Parameters: 201.4M</span>
+        <span>Hardware: JAX XLA</span>
       </div>
     </div>
   </header>
@@ -555,7 +616,7 @@
     <section class="card" id="inputCard">
       <div class="card-header">
         <div class="card-title">
-          <span>⚙️</span> Operational Context & Scenario
+          <span>⚙️</span> Operational Context & Engine
         </div>
         <div class="domain-tabs" id="domainTabs">
           <button class="tab-btn active" data-domain="finance" id="tabFinance">Finance</button>
@@ -564,11 +625,24 @@
         </div>
       </div>
 
+      <!-- Model Engine Selector -->
+      <div class="form-group">
+        <label>
+          <span>Active Inference Model</span>
+          <span style="color: var(--accent-primary); font-size: 0.75rem;">Neural vs Deterministic</span>
+        </label>
+        <div class="domain-tabs" id="modelTabs">
+          <button class="tab-btn active" data-model="200m" id="btnModel200m">⚡ UDM-200M (Neural)</button>
+          <button class="tab-btn" data-model="light" id="btnModelLight">🍃 JEV-Light (Policy 0.1ms)</button>
+          <button class="tab-btn" data-model="hybrid" id="btnModelHybrid">🛡️ JEV-Hybrid (Guarded)</button>
+        </div>
+      </div>
+
       <!-- Presets Selector -->
       <div class="form-group">
         <label for="presetSelect">
           <span>Contrastive Boundary Twin Presets</span>
-          <span style="color: var(--accent-primary); cursor: pointer;" id="btnResetContext">↺ Reset</span>
+          <span style="color: var(--accent-primary); cursor: pointer;" id="btnResetContext">↺ Reset to Preset</span>
         </label>
         <select id="presetSelect">
           <!-- Populated dynamically via JS -->
@@ -587,7 +661,7 @@
       <!-- Run Button -->
       <button class="btn-run" id="btnRun">
         <div class="spinner" id="btnSpinner"></div>
-        <span id="btnRunText">⚡ Run JAX Decision Inference</span>
+        <span id="btnRunText">⚡ Run Decision Inference</span>
       </button>
     </section>
 
@@ -606,25 +680,25 @@
       <div class="decision-hero">
         <div class="decision-badge-container">
           <div>
-            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem;">POLICY EVALUATION OUTCOME</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.35rem;">POLICY EVALUATION OUTCOME</div>
             <div class="decision-badge approve" id="decisionBadge">
               <span id="badgeIcon">✓</span>
               <span id="badgeText">READY</span>
             </div>
           </div>
           <div style="text-align: right;">
-            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem;">CALIBRATED CONFIDENCE</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.35rem;">CALIBRATED CONFIDENCE</div>
             <div style="font-size: 2rem; font-weight: 700; font-family: var(--font-mono);" id="confidenceText">--%</div>
           </div>
         </div>
 
         <div class="metric-grid">
           <div class="metric-box">
-            <span class="metric-label">Model Engine</span>
-            <span class="metric-value" style="font-size: 1rem;">UDM-200M</span>
+            <span class="metric-label">Engine Tier</span>
+            <span class="metric-value" id="boxEngineName" style="font-size: 0.95rem;">UDM-200M</span>
           </div>
           <div class="metric-box">
-            <span class="metric-label">Single-Pass Latency</span>
+            <span class="metric-label">Execution Latency</span>
             <span class="metric-value" id="boxLatency" style="color: var(--success);">-- ms</span>
           </div>
           <div class="metric-box">
@@ -632,11 +706,22 @@
             <span class="metric-value" id="boxTemp">1.50</span>
           </div>
         </div>
+
+        <!-- Ground Truth Policy Explanation -->
+        <div class="reason-box" id="policyReasonBox">
+          <div class="reason-title">
+            <span>Corporate Policy Rule Explanation</span>
+            <span id="policyMatchTag" style="color: var(--success);">Rule Grounded</span>
+          </div>
+          <div id="policyReasonContent" style="color: var(--text-main);">
+            Run an inference to view the deterministic business policy check.
+          </div>
+        </div>
       </div>
 
       <!-- Probability Distribution -->
       <div class="progress-section">
-        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">
+        <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted);">
           CALIBRATED PROBABILITY DISTRIBUTION
         </div>
         <div class="progress-row">
@@ -689,12 +774,11 @@
 
   <!-- Footer -->
   <footer>
-    <div>JEV-200M (Uniplexity Decision Model) • High-Performance JAX & Flax</div>
-    <div>Hardware Target: NVIDIA GPUs (CUDA 12) & Google Cloud TPUs (v2–v6e)</div>
+    <div>JEV-200M & JEV-Light Decision Suite • JAX & Flax</div>
+    <div>Target: NVIDIA GPUs (CUDA 12) & Google Cloud TPUs (v2–v6e)</div>
   </footer>
 
   <script>
-    // Presets database based on Swiss Cheese Contrastive Boundary Pairs
     const PRESETS = {
       finance: [
         {
@@ -721,13 +805,13 @@
         },
         {
           id: "FIN-03",
-          name: "FIN-03: Operational Expense (Software License $15,000)",
+          name: "FIN-03: Amount (90 ZMW) > Remaining Budget (35 ZMW)",
           context: {
-            "department": "operations",
-            "vendor": "Lusaka Tech Supply",
-            "expense_type": "software_license",
-            "budget_remaining": 42000,
-            "amount": 15000.0
+            "department": "information_technology",
+            "vendor": "Liquid Intelligent Technologies",
+            "expense_type": "equipment",
+            "budget_remaining": 35,
+            "amount": 90.0
           }
         }
       ],
@@ -738,9 +822,12 @@
           context: {
             "customer_id": "CUST-ZM-101",
             "customer_segment": "tier_1_enterprise",
+            "customer_tier": "tier_1_enterprise",
             "order_value": 28000,
             "discount_pct": 14.0,
+            "discount_percent": 14.0,
             "current_outstanding_balance": 15000,
+            "outstanding_balance": 15000,
             "credit_limit": 60000
           }
         },
@@ -750,22 +837,13 @@
           context: {
             "customer_id": "CUST-ZM-102",
             "customer_segment": "tier_1_enterprise",
+            "customer_tier": "tier_1_enterprise",
             "order_value": 28000,
             "discount_pct": 16.5,
+            "discount_percent": 16.5,
             "current_outstanding_balance": 15000,
+            "outstanding_balance": 15000,
             "credit_limit": 60000
-          }
-        },
-        {
-          id: "SALES-03",
-          name: "SALES-03: Exceeding Total Credit Exposure (Retail)",
-          context: {
-            "customer_id": "CUST-ZM-103",
-            "customer_segment": "standard_retail",
-            "order_value": 35000,
-            "discount_pct": 10.0,
-            "current_outstanding_balance": 28000,
-            "credit_limit": 50000
           }
         }
       ],
@@ -802,9 +880,51 @@
     };
 
     let currentDomain = "finance";
+    let currentModel = "200m";
+
+    // Theme Switcher
+    const htmlElem = document.documentElement;
+    const themeToggleBtn = document.getElementById("themeToggleBtn");
+    const themeIcon = document.getElementById("themeIcon");
+    const themeText = document.getElementById("themeText");
+
+    themeToggleBtn.addEventListener("click", () => {
+      const isDark = htmlElem.getAttribute("data-theme") === "dark";
+      if (isDark) {
+        htmlElem.setAttribute("data-theme", "light");
+        themeIcon.textContent = "🌙";
+        themeText.textContent = "Dark Theme";
+      } else {
+        htmlElem.setAttribute("data-theme", "dark");
+        themeIcon.textContent = "☀️";
+        themeText.textContent = "Light Theme";
+      }
+    });
+
+    // Model Selector Tabs
+    const modelBtns = [
+      document.getElementById("btnModel200m"),
+      document.getElementById("btnModelLight"),
+      document.getElementById("btnModelHybrid")
+    ];
+
+    modelBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        modelBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentModel = btn.dataset.model;
+        if (currentModel === "light") {
+          btnRunText.textContent = "⚡ Run JEV-Light (0.1ms Engine)";
+        } else if (currentModel === "hybrid") {
+          btnRunText.textContent = "⚡ Run JEV-Hybrid Guardian";
+        } else {
+          btnRunText.textContent = "⚡ Run UDM-200M (Neural JAX)";
+        }
+      });
+    });
 
     // DOM Elements
-    const domainTabs = document.querySelectorAll(".tab-btn");
+    const domainTabs = document.querySelectorAll("#domainTabs .tab-btn");
     const presetSelect = document.getElementById("presetSelect");
     const contextJson = document.getElementById("contextJson");
     const btnFormatJson = document.getElementById("btnFormatJson");
@@ -820,6 +940,10 @@
     const latencyDisplay = document.getElementById("latencyDisplay");
     const boxLatency = document.getElementById("boxLatency");
     const boxTemp = document.getElementById("boxTemp");
+    const boxEngineName = document.getElementById("boxEngineName");
+
+    const policyReasonContent = document.getElementById("policyReasonContent");
+    const policyMatchTag = document.getElementById("policyMatchTag");
 
     const probApproveLabel = document.getElementById("probApproveLabel");
     const probApproveBar = document.getElementById("probApproveBar");
@@ -835,7 +959,6 @@
     const toggleInspector = document.getElementById("toggleInspector");
     const inspectorToggleText = document.getElementById("inspectorToggleText");
 
-    // Initialize Presets for Domain
     function populatePresets(domain) {
       currentDomain = domain;
       presetSelect.innerHTML = "";
@@ -859,7 +982,6 @@
       }
     }
 
-    // Tab Switch
     domainTabs.forEach(tab => {
       tab.addEventListener("click", () => {
         domainTabs.forEach(t => t.classList.remove("active"));
@@ -886,7 +1008,6 @@
       }
     });
 
-    // Inspector toggle
     toggleInspector.addEventListener("click", () => {
       if (canonicalBox.style.display === "none") {
         canonicalBox.style.display = "block";
@@ -897,7 +1018,6 @@
       }
     });
 
-    // Run Inference
     async function runInference() {
       let payloadContext;
       try {
@@ -909,7 +1029,7 @@
 
       btnRun.classList.add("loading");
       btnSpinner.style.display = "block";
-      btnRunText.textContent = "Compiling & Executing in XLA...";
+      btnRunText.textContent = currentModel === "light" ? "Evaluating Policy Rules..." : "Executing in XLA...";
 
       try {
         const response = await fetch("/api/decide", {
@@ -918,7 +1038,8 @@
           body: JSON.stringify({
             domain: currentDomain,
             context: payloadContext,
-            decision_type: "classification"
+            decision_type: "classification",
+            model: currentModel
           })
         });
 
@@ -937,7 +1058,7 @@
       } finally {
         btnRun.classList.remove("loading");
         btnSpinner.style.display = "none";
-        btnRunText.textContent = "⚡ Run JAX Decision Inference";
+        btnRunText.textContent = currentModel === "light" ? "⚡ Run JEV-Light (0.1ms Engine)" : "⚡ Run Decision Inference";
       }
     }
 
@@ -950,7 +1071,6 @@
       const pApprove = (res.probabilities.approve || 0) * 100;
       const pReview = (res.probabilities.review || 0) * 100;
 
-      // Badges
       badgeText.textContent = decision.toUpperCase();
       if (decision === "approve") {
         badgeIcon.textContent = "✓";
@@ -964,36 +1084,38 @@
       }
 
       confidenceText.textContent = confidence.toFixed(1) + "%";
-      latencyDisplay.textContent = `Latency: ${latency.toFixed(2)} ms`;
-      boxLatency.textContent = `${latency.toFixed(2)} ms`;
+      latencyDisplay.textContent = `Latency: ${latency < 1 ? latency.toFixed(3) : latency.toFixed(2)} ms`;
+      boxLatency.textContent = `${latency < 1 ? latency.toFixed(3) : latency.toFixed(2)} ms`;
+      boxEngineName.textContent = currentModel === "light" ? "JEV-Light" : (currentModel === "hybrid" ? "JEV-Hybrid" : "UDM-200M");
 
-      // Probabilities
       probApproveLabel.textContent = pApprove.toFixed(1) + "%";
       probApproveBar.style.width = pApprove + "%";
       probReviewLabel.textContent = pReview.toFixed(1) + "%";
       probReviewBar.style.width = pReview + "%";
 
-      // Gate
       gateProbLabel.textContent = `P(Abstain): ${(abstainProb * 100).toFixed(1)}% (Threshold: ${(res.abstain_gate.threshold * 100).toFixed(0)}%)`;
       gateProbBar.style.width = (abstainProb * 100) + "%";
 
       if (shouldAbstain) {
         gateStatusBadge.textContent = "Escalate to Human";
         gateStatusBadge.className = "gate-status-pill escalate";
-        gateActionLabel.textContent = "Confidence below safety boundary → Supervisor Review Required";
+        gateActionLabel.textContent = "Confidence below safety boundary → Escalate to Supervisor";
       } else {
         gateStatusBadge.textContent = "Auto-Execute";
         gateStatusBadge.className = "gate-status-pill auto";
         gateActionLabel.textContent = "Direct Calibrated Execution Permitted";
       }
 
-      // Canonical box
+      if (res.policy_reason) {
+        policyReasonContent.textContent = res.policy_reason;
+        policyMatchTag.textContent = res.ground_truth_match ? "✓ Policy Compliant" : "⚠ Policy Discrepancy";
+        policyMatchTag.style.color = res.ground_truth_match ? "var(--success)" : "var(--warning)";
+      }
+
       canonicalBox.textContent = res.canonical_format || "// Canonical format not returned";
     }
 
     btnRun.addEventListener("click", runInference);
-
-    // Initial setup
     populatePresets("finance");
   </script>
 </body>
