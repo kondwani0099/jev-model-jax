@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JEV / UDM-200M Decision Studio (JAX)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0d14;
+      --bg-surface: #111726;
+      --bg-card: rgba(18, 24, 38, 0.75);
+      --bg-card-hover: rgba(26, 35, 54, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(99, 102, 241, 0.5);
+      
+      --accent-primary: #6366f1;
+      --accent-primary-hover: #4f46e5;
+      --accent-glow: rgba(99, 102, 241, 0.25);
+      
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.25);
+      --warning: #f59e0b;
+      --warning-glow: rgba(245, 158, 11, 0.25);
+      --danger: #ef4444;
+      --danger-glow: rgba(239, 68, 68, 0.25);
+      --purple: #a855f7;
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-faint: #64748b;
+      
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.08) 0%, transparent 45%);
+    }
+
+    /* Header */
+    header {
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(12px);
+      background: rgba(10, 13, 20, 0.7);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #6366f1, #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #fff;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .brand-title h1 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .telemetry-pills {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .pill {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    /* Container */
+    main {
+      flex: 1;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      main {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+      }
+    }
+
+    /* Panel Card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      backdrop-filter: blur(16px);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Domain Tabs */
+    .domain-tabs {
+      display: flex;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.3rem;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      gap: 0.3rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .tab-btn.active {
+      background: var(--accent-primary);
+      color: #fff;
+      box-shadow: 0 2px 10px var(--accent-glow);
+    }
+
+    /* Preset selector */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    select, textarea, input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    select:focus, textarea:focus, input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    textarea {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      min-height: 220px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .editor-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+    }
+
+    /* Primary Submit Button */
+    .btn-run {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: none;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.95rem 1.5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      box-shadow: 0 4px 18px var(--accent-glow);
+    }
+
+    .btn-run:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-run:active {
+      transform: translateY(0);
+    }
+
+    .btn-run.loading {
+      opacity: 0.8;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Result Panel */
+    .decision-hero {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .decision-badge-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .decision-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 1.4rem;
+      border-radius: 9999px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .decision-badge.approve {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      box-shadow: 0 0 24px var(--success-glow);
+    }
+
+    .decision-badge.review {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      box-shadow: 0 0 24px var(--warning-glow);
+    }
+
+    .decision-badge.abstain {
+      background: rgba(168, 85, 247, 0.15);
+      color: var(--purple);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      box-shadow: 0 0 24px rgba(168, 85, 247, 0.25);
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .metric-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .metric-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--text-main);
+    }
+
+    /* Progress bar */
+    .progress-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .progress-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+    }
+
+    .progress-track {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 9999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .progress-fill.approve {
+      background: linear-gradient(90deg, #10b981, #34d399);
+    }
+
+    .progress-fill.review {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    }
+
+    .progress-fill.abstain {
+      background: linear-gradient(90deg, #a855f7, #c084fc);
+    }
+
+    /* Epistemic Gate Card */
+    .gate-card {
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      background: rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .gate-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .gate-status-pill {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .gate-status-pill.auto {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .gate-status-pill.escalate {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Canonical Inspector */
+    .inspector-header {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+
+    .code-box {
+      background: #06090e;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.6;
+      color: #93c5fd;
+      overflow-x: auto;
+      max-height: 180px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 1.25rem 2.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-faint);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-logo">JEV</div>
+      <div class="brand-title">
+        <h1>JEV-200M Decision Studio</h1>
+        <p>Sub-Millisecond Decision-Native Intelligence in JAX & Flax</p>
+      </div>
+    </div>
+    <div class="telemetry-pills">
+      <div class="pill">
+        <div class="pill-dot" id="serverStatusDot"></div>
+        <span id="serverStatusText">XLA Engine Connected</span>
+      </div>
+      <div class="pill" id="devicePill">
+        <span>Hardware: JAX XLA (CPU/GPU)</span>
+      </div>
+      <div class="pill">
+        <span>Parameters: 201.4M</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body -->
+  <main>
+    <!-- Left Column: Input Form -->
+    <section class="card" id="inputCard">
+      <div class="card-header">
+        <div class="card-title">
+          <span>⚙️</span> Operational Context & Scenario
+        </div>
+        <div class="domain-tabs" id="domainTabs">
+          <button class="tab-btn active" data-domain="finance" id="tabFinance">Finance</button>
+          <button class="tab-btn" data-domain="sales" id="tabSales">Sales</button>
+          <button class="tab-btn" data-domain="inventory" id="tabInventory">Inventory</button>
+        </div>
+      </div>
+
+      <!-- Presets Selector -->
+      <div class="form-group">
+        <label for="presetSelect">
+          <span>Contrastive Boundary Twin Presets</span>
+          <span style="color: var(--accent-primary); cursor: pointer;" id="btnResetContext">↺ Reset</span>
+        </label>
+        <select id="presetSelect">
+          <!-- Populated dynamically via JS -->
+        </select>
+      </div>
+
+      <!-- JSON Context Payload -->
+      <div class="form-group">
+        <div class="editor-toolbar">
+          <label for="contextJson">Operational Context (JSON Payload)</label>
+          <button class="btn-secondary" id="btnFormatJson">Format JSON</button>
+        </div>
+        <textarea id="contextJson" spellcheck="false"></textarea>
+      </div>
+
+      <!-- Run Button -->
+      <button class="btn-run" id="btnRun">
+        <div class="spinner" id="btnSpinner"></div>
+        <span id="btnRunText">⚡ Run JAX Decision Inference</span>
+      </button>
+    </section>
+
+    <!-- Right Column: Results & Telemetry -->
+    <section class="card" id="outputCard">
+      <div class="card-header">
+        <div class="card-title">
+          <span>📊</span> Decision Evaluation & Calibrated Telemetry
+        </div>
+        <div class="pill" id="latencyPill" style="color: var(--success); font-weight: 600;">
+          <span id="latencyDisplay">Latency: -- ms</span>
+        </div>
+      </div>
+
+      <!-- Hero Decision Banner -->
+      <div class="decision-hero">
+        <div class="decision-badge-container">
+          <div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem;">POLICY EVALUATION OUTCOME</div>
+            <div class="decision-badge approve" id="decisionBadge">
+              <span id="badgeIcon">✓</span>
+              <span id="badgeText">READY</span>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem;">CALIBRATED CONFIDENCE</div>
+            <div style="font-size: 2rem; font-weight: 700; font-family: var(--font-mono);" id="confidenceText">--%</div>
+          </div>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-box">
+            <span class="metric-label">Model Engine</span>
+            <span class="metric-value" style="font-size: 1rem;">UDM-200M</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-label">Single-Pass Latency</span>
+            <span class="metric-value" id="boxLatency" style="color: var(--success);">-- ms</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-label">Temp Scaling (T)</span>
+            <span class="metric-value" id="boxTemp">1.50</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Probability Distribution -->
+      <div class="progress-section">
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">
+          CALIBRATED PROBABILITY DISTRIBUTION
+        </div>
+        <div class="progress-row">
+          <div class="progress-labels">
+            <span>Approve (Compliant)</span>
+            <span id="probApproveLabel">--%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill approve" id="probApproveBar" style="width: 0%;"></div>
+          </div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-labels">
+            <span>Review (Policy Boundary Flag)</span>
+            <span id="probReviewLabel">--%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill review" id="probReviewBar" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Epistemic Abstention Gate -->
+      <div class="gate-card">
+        <div class="gate-header">
+          <span>Epistemic Abstention Gate (Uncertainty Routing)</span>
+          <span class="gate-status-pill auto" id="gateStatusBadge">Auto-Execution</span>
+        </div>
+        <div class="progress-row">
+          <div class="progress-labels">
+            <span id="gateProbLabel">P(Abstain): -- (Threshold: 0.60)</span>
+            <span id="gateActionLabel">Direct Auto-Execution</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill abstain" id="gateProbBar" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Canonical Format Inspector -->
+      <div class="gate-card">
+        <div class="inspector-header" id="toggleInspector">
+          <span style="font-size: 0.85rem; font-weight: 600;">Canonical Tokenized Context (&lt;DECISION&gt; Block)</span>
+          <span style="font-size: 0.75rem; color: var(--text-faint);" id="inspectorToggleText">Hide ▲</span>
+        </div>
+        <pre class="code-box" id="canonicalBox">// Run an inference request to view canonical serialization...</pre>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div>JEV-200M (Uniplexity Decision Model) • High-Performance JAX & Flax</div>
+    <div>Hardware Target: NVIDIA GPUs (CUDA 12) & Google Cloud TPUs (v2–v6e)</div>
+  </footer>
+
+  <script>
+    // Presets database based on Swiss Cheese Contrastive Boundary Pairs
+    const PRESETS = {
+      finance: [
+        {
+          id: "FIN-01",
+          name: "FIN-01: Equipment Claim <= 10,000 ZMW (Compliant)",
+          context: {
+            "department": "information_technology",
+            "vendor": "Liquid Intelligent Technologies",
+            "expense_type": "equipment",
+            "budget_remaining": 35000,
+            "amount": 9950.0
+          }
+        },
+        {
+          id: "FIN-02",
+          name: "FIN-02: Equipment Claim > 10,000 ZMW (Breached +50 ZMW)",
+          context: {
+            "department": "information_technology",
+            "vendor": "Liquid Intelligent Technologies",
+            "expense_type": "equipment",
+            "budget_remaining": 35000,
+            "amount": 10050.0
+          }
+        },
+        {
+          id: "FIN-03",
+          name: "FIN-03: Operational Expense (Software License $15,000)",
+          context: {
+            "department": "operations",
+            "vendor": "Lusaka Tech Supply",
+            "expense_type": "software_license",
+            "budget_remaining": 42000,
+            "amount": 15000.0
+          }
+        }
+      ],
+      sales: [
+        {
+          id: "SALES-01",
+          name: "SALES-01: Order within Discount (14.0%) & Credit Limit",
+          context: {
+            "customer_id": "CUST-ZM-101",
+            "customer_segment": "tier_1_enterprise",
+            "order_value": 28000,
+            "discount_pct": 14.0,
+            "current_outstanding_balance": 15000,
+            "credit_limit": 60000
+          }
+        },
+        {
+          id: "SALES-02",
+          name: "SALES-02: Breaching 15.0% Discount Limit (16.5%)",
+          context: {
+            "customer_id": "CUST-ZM-102",
+            "customer_segment": "tier_1_enterprise",
+            "order_value": 28000,
+            "discount_pct": 16.5,
+            "current_outstanding_balance": 15000,
+            "credit_limit": 60000
+          }
+        },
+        {
+          id: "SALES-03",
+          name: "SALES-03: Exceeding Total Credit Exposure (Retail)",
+          context: {
+            "customer_id": "CUST-ZM-103",
+            "customer_segment": "standard_retail",
+            "order_value": 35000,
+            "discount_pct": 10.0,
+            "current_outstanding_balance": 28000,
+            "credit_limit": 50000
+          }
+        }
+      ],
+      inventory: [
+        {
+          id: "INV-01",
+          name: "INV-01: Stock Write-Off <= 5,000 ZMW Threshold ($4,500)",
+          context: {
+            "warehouse_id": "WH-LUSAKA-01",
+            "item_sku": "SKU-COPPER-ROD-01",
+            "category": "raw_materials",
+            "movement_type": "write_off",
+            "unit_value": 45.0,
+            "quantity": 100,
+            "total_value": 4500.0,
+            "reason_code": "scrap_damaged"
+          }
+        },
+        {
+          id: "INV-02",
+          name: "INV-02: Stock Write-Off > 5,000 ZMW Threshold ($5,500)",
+          context: {
+            "warehouse_id": "WH-LUSAKA-01",
+            "item_sku": "SKU-COPPER-ROD-01",
+            "category": "raw_materials",
+            "movement_type": "write_off",
+            "unit_value": 55.0,
+            "quantity": 100,
+            "total_value": 5500.0,
+            "reason_code": "scrap_damaged"
+          }
+        }
+      ]
+    };
+
+    let currentDomain = "finance";
+
+    // DOM Elements
+    const domainTabs = document.querySelectorAll(".tab-btn");
+    const presetSelect = document.getElementById("presetSelect");
+    const contextJson = document.getElementById("contextJson");
+    const btnFormatJson = document.getElementById("btnFormatJson");
+    const btnResetContext = document.getElementById("btnResetContext");
+    const btnRun = document.getElementById("btnRun");
+    const btnSpinner = document.getElementById("btnSpinner");
+    const btnRunText = document.getElementById("btnRunText");
+
+    const decisionBadge = document.getElementById("decisionBadge");
+    const badgeText = document.getElementById("badgeText");
+    const badgeIcon = document.getElementById("badgeIcon");
+    const confidenceText = document.getElementById("confidenceText");
+    const latencyDisplay = document.getElementById("latencyDisplay");
+    const boxLatency = document.getElementById("boxLatency");
+    const boxTemp = document.getElementById("boxTemp");
+
+    const probApproveLabel = document.getElementById("probApproveLabel");
+    const probApproveBar = document.getElementById("probApproveBar");
+    const probReviewLabel = document.getElementById("probReviewLabel");
+    const probReviewBar = document.getElementById("probReviewBar");
+
+    const gateStatusBadge = document.getElementById("gateStatusBadge");
+    const gateProbLabel = document.getElementById("gateProbLabel");
+    const gateActionLabel = document.getElementById("gateActionLabel");
+    const gateProbBar = document.getElementById("gateProbBar");
+
+    const canonicalBox = document.getElementById("canonicalBox");
+    const toggleInspector = document.getElementById("toggleInspector");
+    const inspectorToggleText = document.getElementById("inspectorToggleText");
+
+    // Initialize Presets for Domain
+    function populatePresets(domain) {
+      currentDomain = domain;
+      presetSelect.innerHTML = "";
+      const list = PRESETS[domain] || [];
+      list.forEach((item, index) => {
+        const opt = document.createElement("option");
+        opt.value = index;
+        opt.textContent = item.name;
+        presetSelect.appendChild(opt);
+      });
+      if (list.length > 0) {
+        setPreset(0);
+      }
+    }
+
+    function setPreset(index) {
+      const list = PRESETS[currentDomain] || [];
+      const item = list[index];
+      if (item) {
+        contextJson.value = JSON.stringify(item.context, null, 2);
+      }
+    }
+
+    // Tab Switch
+    domainTabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        domainTabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        const domain = tab.dataset.domain;
+        populatePresets(domain);
+      });
+    });
+
+    presetSelect.addEventListener("change", (e) => {
+      setPreset(e.target.value);
+    });
+
+    btnResetContext.addEventListener("click", () => {
+      setPreset(presetSelect.value);
+    });
+
+    btnFormatJson.addEventListener("click", () => {
+      try {
+        const parsed = JSON.parse(contextJson.value);
+        contextJson.value = JSON.stringify(parsed, null, 2);
+      } catch (err) {
+        alert("Invalid JSON: " + err.message);
+      }
+    });
+
+    // Inspector toggle
+    toggleInspector.addEventListener("click", () => {
+      if (canonicalBox.style.display === "none") {
+        canonicalBox.style.display = "block";
+        inspectorToggleText.textContent = "Hide ▲";
+      } else {
+        canonicalBox.style.display = "none";
+        inspectorToggleText.textContent = "Show ▼";
+      }
+    });
+
+    // Run Inference
+    async function runInference() {
+      let payloadContext;
+      try {
+        payloadContext = JSON.parse(contextJson.value);
+      } catch (err) {
+        alert("Invalid JSON context: " + err.message);
+        return;
+      }
+
+      btnRun.classList.add("loading");
+      btnSpinner.style.display = "block";
+      btnRunText.textContent = "Compiling & Executing in XLA...";
+
+      try {
+        const response = await fetch("/api/decide", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            domain: currentDomain,
+            context: payloadContext,
+            decision_type: "classification"
+          })
+        });
+
+        const data = await response.json();
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
+        renderDecision(data);
+      } catch (err) {
+        console.error(err);
+        badgeText.textContent = "ERROR";
+        badgeIcon.textContent = "⚠";
+        decisionBadge.className = "decision-badge review";
+        alert("Inference request failed: " + err.message);
+      } finally {
+        btnRun.classList.remove("loading");
+        btnSpinner.style.display = "none";
+        btnRunText.textContent = "⚡ Run JAX Decision Inference";
+      }
+    }
+
+    function renderDecision(res) {
+      const decision = res.decision.toLowerCase();
+      const confidence = res.confidence * 100;
+      const latency = res.latency_ms;
+      const shouldAbstain = res.abstain_gate.abstain;
+      const abstainProb = res.abstain_gate.abstain_probability;
+      const pApprove = (res.probabilities.approve || 0) * 100;
+      const pReview = (res.probabilities.review || 0) * 100;
+
+      // Badges
+      badgeText.textContent = decision.toUpperCase();
+      if (decision === "approve") {
+        badgeIcon.textContent = "✓";
+        decisionBadge.className = "decision-badge approve";
+      } else if (decision === "review") {
+        badgeIcon.textContent = "⚠";
+        decisionBadge.className = "decision-badge review";
+      } else {
+        badgeIcon.textContent = "✕";
+        decisionBadge.className = "decision-badge abstain";
+      }
+
+      confidenceText.textContent = confidence.toFixed(1) + "%";
+      latencyDisplay.textContent = `Latency: ${latency.toFixed(2)} ms`;
+      boxLatency.textContent = `${latency.toFixed(2)} ms`;
+
+      // Probabilities
+      probApproveLabel.textContent = pApprove.toFixed(1) + "%";
+      probApproveBar.style.width = pApprove + "%";
+      probReviewLabel.textContent = pReview.toFixed(1) + "%";
+      probReviewBar.style.width = pReview + "%";
+
+      // Gate
+      gateProbLabel.textContent = `P(Abstain): ${(abstainProb * 100).toFixed(1)}% (Threshold: ${(res.abstain_gate.threshold * 100).toFixed(0)}%)`;
+      gateProbBar.style.width = (abstainProb * 100) + "%";
+
+      if (shouldAbstain) {
+        gateStatusBadge.textContent = "Escalate to Human";
+        gateStatusBadge.className = "gate-status-pill escalate";
+        gateActionLabel.textContent = "Confidence below safety boundary → Supervisor Review Required";
+      } else {
+        gateStatusBadge.textContent = "Auto-Execute";
+        gateStatusBadge.className = "gate-status-pill auto";
+        gateActionLabel.textContent = "Direct Calibrated Execution Permitted";
+      }
+
+      // Canonical box
+      canonicalBox.textContent = res.canonical_format || "// Canonical format not returned";
+    }
+
+    btnRun.addEventListener("click", runInference);
+
+    // Initial setup
+    populatePresets("finance");
+  </script>
+</body>
+</html>

@@ -171,7 +171,19 @@ Output:
 
 ---
 
-## 7. Multi-Domain Verification Suite
+## 7. Interactive Web Decision Studio
+
+Test the trained model using the modern, real-time web application featuring domain tabs, contrastive boundary twin presets, calibrated confidence meters, and canonical `<DECISION>` sequence inspection:
+
+```bash
+# Start Web Server on port 8080
+python webapp.py --port 8080
+```
+Then navigate to **`http://localhost:8080`** in any web browser.
+
+---
+
+## 8. Multi-Domain Verification Suite
 
 Run comprehensive boundary evaluation across Finance, Sales, Inventory, and edge cases:
 
@@ -181,7 +193,7 @@ python demo_evaluate_jax.py
 
 ---
 
-## 8. Benchmark Scorecard: UDM-200M (JAX) vs. UDM-100M (PyTorch)
+## 9. Benchmark Scorecard: UDM-200M (JAX) vs. UDM-100M (PyTorch)
 
 A direct comparative evaluation across architecture, hardware footprint, accuracy on 300 contrastive boundary pairs (600 scenarios), calibration, and inference latencies:
 
@@ -235,7 +247,7 @@ $$\text{Decision Output} = \begin{cases}
 
 ---
 
-## 9. Hardware & Computer Resource Footprint
+## 10. Hardware & Computer Resource Footprint
 
 Detailed memory requirements and compute profiling for local workstations and cloud deployments:
 
@@ -254,6 +266,6 @@ Workstation Resource Footprint (UDM-200M JAX):
 
 ---
 
-## 10. License
+## 11. License
 
 This project is licensed under the Apache 2.0 License.
